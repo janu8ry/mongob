@@ -1,5 +1,5 @@
 # Mongob
-Mongob is a MongoDB backup tool built with python,  
+Mongob is a automated MongoDB backup tool built with python,  
 inspired by [stefanprodan/mgob](https://github.com/stefanprodan/mgob).
 
 ## Features
