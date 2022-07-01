@@ -1,0 +1,27 @@
+# docker-compose.yml
+
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    container_name: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      -  /Users/janu8ry/Desktop/test2:/data/db
+    environment:
+      - TZ=Asia/Seoul
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty
+  mongob:
+    image: mongob:latest
+    restart: always
+    container_name: "mongob"
+    volumes:
+      - ./config.yml:/mongob/config.yml
+      - ./backup:/backup
+    environment:
+      - ARCH=arm64
+      - TZ=Asia/Seoul
