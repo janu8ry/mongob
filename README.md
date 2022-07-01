@@ -5,6 +5,7 @@ inspired by [stefanprodan/mgob](https://github.com/stefanprodan/mgob).
 ## Features
 - scheduled backups
 - supports MongoDB 4.0 ~ 5.0
+- supports amd64, arm64 architecture
 - light image
 
 ## Install
@@ -71,4 +72,20 @@ View Mongob logs with `docker logs mongob -f`.
 ```shell
 docker exec -it mongob /bin/sh
 mongorestore --gzip --archive=/backup/xxxx.gz --host mongo:27017 --drop
+```
+
+## Build 
+- amd64 build
+You need amd64 machine to build amd64 image.
+
+```shell
+docker build -t mongob:latest --build-arg ARCH=amd64 .
+docker image tag mongob:latest mongob:amd64
+```
+
+- arm64 build
+You need arm64 machine to build arm64 image.
+
+```shell
+docker build -t mongob:arm64 --build-arg ARCH=arm64 .
 ```

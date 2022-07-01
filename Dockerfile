@@ -1,6 +1,6 @@
 FROM golang:1.17-alpine as tools-builder
 
-ENV ARCH=amd64
+ARG ARCH=amd64
 
 RUN apk add --no-cache git build-base krb5-dev \
     && git clone https://github.com/mongodb/mongo-tools.git --depth 1 --branch 100.5.3
