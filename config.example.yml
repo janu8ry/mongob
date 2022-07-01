@@ -1,9 +1,0 @@
-target:
-  host: "mongo"
-  port: 27017
-  database: "mydb"
-  username: "admin"
-  password: "password"
-scheduler:
-  hour: "0, 12"
-  minute: "0"

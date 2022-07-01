@@ -2,6 +2,5 @@ venv
 .gitignore
 README.md
 config.yml
-config.example.yml
 backup
 .idea
