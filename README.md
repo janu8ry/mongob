@@ -48,7 +48,8 @@ services:
 ## Configuration
 Define your backup plan in `/mongob/config.yml`.  
 The config file should follow the form below.  
-
+Backup files are stored in `/backup`.   
+   
 cron expression is available for `hour`, `minute` config.   
 If you're not using authentication, keep `username`, `password` to `null`.
 
