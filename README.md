@@ -50,8 +50,12 @@ Define your backup plan in `/mongob/config.yml`.
 The config file should follow the form below.  
 Backup files are stored in `/backup`.   
    
-cron expression is available for `hour`, `minute` config.   
-If you're not using authentication, keep `username`, `password` to `null`.
+Cron expression is available for `hour`, `minute` config.   
+If you're not using authentication, keep `username`, `password` to `null`.    
+    
+Mongob will do a test run at start if `test` set to `true`.   
+If you don't need test run, set `test` to `false`.   
+This is not a necessary parameter, and it defaults to `true` if you not set this parameter.   
 
 _example config.yml_
 ```yaml
@@ -64,6 +68,7 @@ target:
 scheduler:
   hour: "0, 12"  # backup at 0 am, 12pm everyday
   minute: "0"
+  test: true
 ```
 
 ## Logs

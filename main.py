@@ -30,7 +30,14 @@ except KeyError as e:
     logger.error(f"Missing parameter in config file: {e}")
     sys.exit(1)
 
-logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}")
+do_test = True
+if "test" in config_data["scheduler"]:
+    do_test = config_data["scheduler"]["test"]
+    if not isinstance(do_test, bool):
+        logger.error(f"Incorrect value at scheduler.test: {do_test}")
+        sys.exit(1)
+
+logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}, testrun = {do_test}")
 
 if "TZ" in os.environ:
     tz = os.environ["TZ"]
@@ -51,12 +58,13 @@ def run_command(fp):
         sys.exit(1)
 
 
-logger.info("Trying test run.")
-test_fp = "test.gz"
-run_command(test_fp)
-if os.path.isfile(test_fp):
-    os.remove(test_fp)
-logger.info("Test run finished successfully.")
+if do_test:
+    logger.info("Trying test run.")
+    test_fp = "test.gz"
+    run_command(test_fp)
+    if os.path.isfile(test_fp):
+        os.remove(test_fp)
+    logger.info("Test run finished successfully.")
 
 scheduler = BlockingScheduler(timezone=tz)
 
