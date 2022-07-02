@@ -28,6 +28,7 @@ try:
     minute = config_data["scheduler"]["minute"]
 except KeyError as e:
     logger.error(f"Missing parameter in config file: {e}")
+    logger.info("Shutting down...")
     sys.exit(1)
 
 do_test = True
@@ -35,6 +36,7 @@ if "test" in config_data["scheduler"]:
     do_test = config_data["scheduler"]["test"]
     if not isinstance(do_test, bool):
         logger.error(f"Incorrect value at scheduler.test: {do_test}")
+        logger.info("Shutting down...")
         sys.exit(1)
 
 logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}, testrun = {do_test}")
@@ -76,5 +78,11 @@ def backup():
     logger.info(f"Backup completed. filename={fp}")
 
 
-scheduler.add_job(backup, "cron", hour=hour, minute=minute)
+try:
+    scheduler.add_job(backup, "cron", hour=hour, minute=minute)
+except ValueError as e:
+    logger.error(e)
+    logger.info("Shutting down...")
+    sys.exit(1)
+
 scheduler.start()
