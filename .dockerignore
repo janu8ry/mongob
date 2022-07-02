@@ -1,5 +1,6 @@
 venv
 .gitignore
+docker-compose.yml
 README.md
 config.yml
 .git

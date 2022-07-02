@@ -1,4 +1,5 @@
 venv
 backup
 config.yml
+docker-compose.yml
 .idea

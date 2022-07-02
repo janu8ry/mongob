@@ -27,17 +27,32 @@ if "TZ" in os.environ:
 else:
     tz = "Europe/London"
 
+
+def run_command(fp):
+    cmd = f"/usr/bin/mongodump --db {db} --gzip --archive={fp} --host {host_ip}:{host_port}"
+    if all([username, password]):
+        logger.info("Using authentication. authSource=admin")
+        cmd += f" --authenticationDatabase admin -u {username} -p {password}"
+    subprocess.run(cmd, check=True, shell=True)
+
+
+logger.info("Trying test run.")
+test_fp = "test.gz"
+try:
+    run_command(test_fp)
+except Exception as e:
+    logger.error(e)
+if os.path.isfile(test_fp):
+    os.remove(test_fp)
+logger.info("Test run finished successfully.")
+
 scheduler = BlockingScheduler(timezone=tz)
 
 
 def backup():
     logger.info("Starting backup")
     fp = f"/backup/{time.time():.0f}.gz"
-    cmd = f"/usr/bin/mongodump --db {db} --gzip --archive={fp} --host {host_ip}:{host_port}"
-    if all([username, password]):
-        logger.info("Using authentication. authSource=admin")
-        cmd += f" --authenticationDatabase admin -u {username} -p {password}"
-    subprocess.run(cmd, check=True, shell=True)
+    run_command(fp)
     logger.info(f"Backup completed. filename={fp}")
 
 
