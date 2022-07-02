@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import subprocess
 import logging
@@ -33,15 +34,17 @@ def run_command(fp):
     if all([username, password]):
         logger.info("Using authentication. authSource=admin")
         cmd += f" --authenticationDatabase admin -u {username} -p {password}"
-    subprocess.run(cmd, check=True, shell=True)
+    try:
+        subprocess.run(cmd, check=True, shell=True)
+    except subprocess.CalledProcessError:
+        logger.error(f"Cannot connect to db {host_ip}:{host_port}")
+        logger.info("Shutting down...")
+        sys.exit(1)
 
 
 logger.info("Trying test run.")
 test_fp = "test.gz"
-try:
-    run_command(test_fp)
-except Exception as e:
-    logger.error(e)
+run_command(test_fp)
 if os.path.isfile(test_fp):
     os.remove(test_fp)
 logger.info("Test run finished successfully.")
