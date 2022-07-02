@@ -18,14 +18,25 @@ with open("/mongob/config.yml", encoding="utf-8") as f:
     config_data = yaml.safe_load(f)
 logger.info("Loaded config file: /mongob/config.yml")
 
+username = None
+if "username_file" in config_data["target"]:
+    with open(config_data["target"]["username_file"]) as f:
+        username = f.read()
+password = None
+if "password_file" in config_data["target"]:
+    with open(config_data["target"]["password_file"]) as f:
+        password = f.read()
+
 try:
     host_ip = config_data["target"]["host"]
     host_port = config_data["target"]["port"]
     db = config_data["target"]["database"]
-    username = config_data["target"]["username"]
-    password = config_data["target"]["password"]
     hour = config_data["scheduler"]["hour"]
     minute = config_data["scheduler"]["minute"]
+    if not username:
+        username = config_data["target"]["username"]
+    if not password:
+        password = config_data["target"]["password"]
 except KeyError as e:
     logger.error(f"Missing parameter in config file: {e}")
     logger.info("Shutting down...")

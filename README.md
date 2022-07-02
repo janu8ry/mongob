@@ -52,6 +52,32 @@ Backup files are stored in `/backup`.
    
 Cron expression is available for `hour`, `minute` config.   
 If you're not using authentication, keep `username`, `password` to `null`.    
+   
+Or, you can add `_file` behind parameter to keep your info safe.   
+The file should contain one line plain text file, like txt format.   
+Link file using volume in `docker-compose.yml`.   
+
+_examples_
+```yaml
+# docker-compose.yml
+mongob:
+  image: janu8ry/mongob:latest
+  restart: always
+  container_name: "mongob"
+  volumes:
+    - ./config.yml:/mongob/config.yml
+    - ./backup:/backup
+    - ./user.txt:/mongob/user.txt
+    - ./pw.txt:/mongob/pw.txt
+
+# config.yml
+target:
+  host: "mongo"
+  port: 27017
+  database: "test"
+  username_file: "/mongob/user.txt"
+  password_file: "/mongob/pw.txt"
+```
     
 Mongob will do a test run at start if `test` set to `true`.   
 If you don't need test run, set `test` to `false`.   
