@@ -18,8 +18,17 @@ with open("/mongob/config.yml", encoding="utf-8") as f:
     config_data = yaml.safe_load(f)
 logger.info("Loaded config file: /mongob/config.yml")
 
-host_ip, host_port, db, username, password = config_data["target"].values()
-hour, minute = config_data["scheduler"].values()
+try:
+    host_ip = config_data["target"]["host"]
+    host_port = config_data["target"]["port"]
+    db = config_data["target"]["database"]
+    username = config_data["target"]["username"]
+    password = config_data["target"]["password"]
+    hour = config_data["scheduler"]["hour"]
+    minute = config_data["scheduler"]["minute"]
+except KeyError as e:
+    logger.error(f"Missing parameter in config file: {e}")
+    sys.exit(1)
 
 logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}")
 
