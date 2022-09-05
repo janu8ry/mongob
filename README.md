@@ -55,7 +55,9 @@ If you're not using authentication, keep `username`, `password` to `null`.
    
 Or, you can add `_file` behind parameter to keep your info safe.   
 The file should contain one line plain text file, like txt format.   
-Link file using volume in `docker-compose.yml`.   
+Link file using volume in `docker-compose.yml`.
+
+Also you can use `MONGOB_USERNAME`, `MONGOB_PASSWORD` environ to set username and password.
 
 _examples_
 ```yaml

@@ -33,14 +33,23 @@ try:
     db = config_data["target"]["database"]
     hour = config_data["scheduler"]["hour"]
     minute = config_data["scheduler"]["minute"]
-    if not username:
-        username = config_data["target"]["username"]
-    if not password:
-        password = config_data["target"]["password"]
 except KeyError as e:
     logger.error(f"Missing parameter in config file: {e}")
     logger.info("Shutting down...")
     sys.exit(1)
+
+try:
+    if not username:
+        username = config_data["target"]["username"]
+    if not password:
+        password = config_data["target"]["password"]
+except KeyError:
+    try:
+        username = os.environ["MONGOB_USERNAME"]
+        password = os.environ["MONGOB_PASSWORD"]
+    except KeyError:
+        username = None
+        password = None
 
 do_test = True
 if "test" in config_data["scheduler"]:
