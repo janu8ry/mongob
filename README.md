@@ -51,7 +51,7 @@ Backup files are stored in `/backup`.
 Cron expression is available for `hour`, `minute` config.   
 If you're not using authentication, keep `username`, `password` to `null`.    
 
-Also you can use `MONGOB_USERNAME`, `MONGOB_PASSWORD` environ to set username and password.
+Also you can use `MONGO_USERNAME`, `MONGO_PASSWORD` environ to set username and password.
 
 _examples_
 ```yaml
