@@ -33,11 +33,15 @@ except KeyError as e:
     sys.exit(1)
 
 try:
-    username = os.environ["MONGOB_USERNAME"]
-    password = os.environ["MONGOB_PASSWORD"]
+    username = os.environ["MONGO_USERNAME"]
+    password = os.environ["MONGO_PASSWORD"]
 except KeyError:
-    username = None
-    password = None
+    try:
+        username = dbdata["username"]
+        password = dbdata["password"]
+    except KeyError:
+        username = None
+        password = None
 
 logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}")
 
