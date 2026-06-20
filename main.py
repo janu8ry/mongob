@@ -19,20 +19,20 @@ with open("/mongob/config.yml", encoding="utf-8") as f:
 logger.info("Loaded config file: /mongob/config.yml")
 
 username = None
-if "username_file" in config_data["target"]:
-    with open(config_data["target"]["username_file"]) as f:
+if "username_file" in config_data["mongo"]["main"]:
+    with open(config_data["mongo"]["main"]["username_file"]) as f:
         username = f.read()
 password = None
-if "password_file" in config_data["target"]:
-    with open(config_data["target"]["password_file"]) as f:
+if "password_file" in config_data["mongo"]["main"]:
+    with open(config_data["mongo"]["main"]["password_file"]) as f:
         password = f.read()
 
 try:
-    host_ip = config_data["target"]["host"]
-    host_port = config_data["target"]["port"]
-    db = config_data["target"]["database"]
-    hour = config_data["scheduler"]["hour"]
-    minute = config_data["scheduler"]["minute"]
+    host_ip = config_data["mongo"]["main"]["host"]
+    host_port = config_data["mongo"]["main"]["port"]
+    db = config_data["mongo"]["main"]["db"]
+    hour = config_data["mongo"]["scheduler"]["hour"]
+    minute = config_data["mongo"]["scheduler"]["minute"]
 except KeyError as e:
     logger.error(f"Missing parameter in config file: {e}")
     logger.info("Shutting down...")
@@ -40,9 +40,9 @@ except KeyError as e:
 
 try:
     if not username:
-        username = config_data["target"]["username"]
+        username = config_data["mongo"]["main"]["username"]
     if not password:
-        password = config_data["target"]["password"]
+        password = config_data["mongo"]["main"]["password"]
 except KeyError:
     try:
         username = os.environ["MONGOB_USERNAME"]
@@ -51,15 +51,7 @@ except KeyError:
         username = None
         password = None
 
-do_test = True
-if "test" in config_data["scheduler"]:
-    do_test = config_data["scheduler"]["test"]
-    if not isinstance(do_test, bool):
-        logger.error(f"Incorrect value at scheduler.test: {do_test}")
-        logger.info("Shutting down...")
-        sys.exit(1)
-
-logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}, testrun = {do_test}")
+logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}")
 
 if "TZ" in os.environ:
     tz = os.environ["TZ"]
@@ -78,15 +70,6 @@ def run_command(fp):
         logger.error(f"Cannot connect to db {host_ip}:{host_port}")
         logger.info("Shutting down...")
         sys.exit(1)
-
-
-if do_test:
-    logger.info("Trying test run.")
-    test_fp = "test.gz"
-    run_command(test_fp)
-    if os.path.isfile(test_fp):
-        os.remove(test_fp)
-    logger.info("Test run finished successfully.")
 
 scheduler = BlockingScheduler(timezone=tz)
 
