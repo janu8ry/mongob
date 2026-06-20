@@ -20,14 +20,6 @@ logger.info("Loaded config file: /mongob/config.yml")
 
 test = config_data["testmode"]
 dbdata = config_data["mongo"]["test" if test else "main"]
-username = None
-if "username_file" in dbdata:
-    with open(dbdata["username_file"]) as f:
-        username = f.read()
-password = None
-if "password_file" in dbdata:
-    with open(dbdata["password_file"]) as f:
-        password = f.read()
 
 try:
     host_ip = dbdata["host"]
@@ -41,17 +33,11 @@ except KeyError as e:
     sys.exit(1)
 
 try:
-    if not username:
-        username = dbdata["username"]
-    if not password:
-        password = dbdata["password"]
+    username = os.environ["MONGOB_USERNAME"]
+    password = os.environ["MONGOB_PASSWORD"]
 except KeyError:
-    try:
-        username = os.environ["MONGOB_USERNAME"]
-        password = os.environ["MONGOB_PASSWORD"]
-    except KeyError:
-        username = None
-        password = None
+    username = None
+    password = None
 
 logger.info(f"Starting with config: host - {host_ip}:{host_port}, db - {db}")
 
