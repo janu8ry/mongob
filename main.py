@@ -18,19 +18,21 @@ with open("/mongob/config.yml", encoding="utf-8") as f:
     config_data = yaml.safe_load(f)
 logger.info("Loaded config file: /mongob/config.yml")
 
+test = config_data["testmode"]
+dbdata = config_data["mongo"]["test" if testmode else "main"]
 username = None
-if "username_file" in config_data["mongo"]["main"]:
-    with open(config_data["mongo"]["main"]["username_file"]) as f:
+if "username_file" in dbdata:
+    with open(dbdata["username_file"]) as f:
         username = f.read()
 password = None
-if "password_file" in config_data["mongo"]["main"]:
-    with open(config_data["mongo"]["main"]["password_file"]) as f:
+if "password_file" in dbdata:
+    with open(dbdata["password_file"]) as f:
         password = f.read()
 
 try:
-    host_ip = config_data["mongo"]["main"]["host"]
-    host_port = config_data["mongo"]["main"]["port"]
-    db = config_data["mongo"]["main"]["db"]
+    host_ip = dbdata["host"]
+    host_port = dbdata["port"]
+    db = dbdata["db"]
     hour = config_data["mongo"]["scheduler"]["hour"]
     minute = config_data["mongo"]["scheduler"]["minute"]
 except KeyError as e:
@@ -40,9 +42,9 @@ except KeyError as e:
 
 try:
     if not username:
-        username = config_data["mongo"]["main"]["username"]
+        username = dbdata["username"]
     if not password:
-        password = config_data["mongo"]["main"]["password"]
+        password = dbdata["password"]
 except KeyError:
     try:
         username = os.environ["MONGOB_USERNAME"]
