@@ -19,7 +19,7 @@ with open("/mongob/config.yml", encoding="utf-8") as f:
 logger.info("Loaded config file: /mongob/config.yml")
 
 test = config_data["testmode"]
-dbdata = config_data["mongo"]["test" if testmode else "main"]
+dbdata = config_data["mongo"]["test" if test else "main"]
 username = None
 if "username_file" in dbdata:
     with open(dbdata["username_file"]) as f:
