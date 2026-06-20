@@ -21,8 +21,6 @@ _docker-compose.yml_
 ```yml
 # docker-compose.yml
 
-version: "3.9"
-
 services:
   mongo:
     image: mongo:latest
@@ -73,30 +71,28 @@ mongob:
     - ./pw.txt:/mongob/pw.txt
 
 # config.yml
-target:
-  host: "mongo"
-  port: 27017
-  database: "test"
-  username_file: "/mongob/user.txt"
-  password_file: "/mongob/pw.txt"
+mongo:
+  main:
+    host: "mongo"
+    port: 27017
+    db: "test"
+    username_file: "/mongob/user.txt"
+    password_file: "/mongob/pw.txt"
 ```
-    
-Mongob will do a test run at start if `test` set to `true`.   
-If you don't need test run, set `test` to `false`.   
-This is not a necessary parameter, and it defaults to `true` if you not set this parameter.   
 
 _example config.yml_
 ```yaml
-target:
-  host: "mongo"
-  port: 27017
-  database: "mydb"
-  username: "admin"  # or null
-  password: "password"  # or null
-scheduler:
-  hour: "0, 12"  # backup at 0 am, 12pm everyday
-  minute: "0"
-  test: true
+mongo:
+  main:
+    host: "mongo"
+    port: 27017
+    db: "test"
+    username: "admin"  # or null
+    password: "password"  # or null
+  scheduler:
+    hour: "0, 12"  # backup at 0 am, 12pm everyday
+    minute: "0"
+    test: true
 ```
 
 ## Logs
